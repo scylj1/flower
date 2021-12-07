@@ -13,6 +13,7 @@
  *************************************************************************************************/
 
 #pragma once
+#include "client.h"
 #include <grpcpp/grpcpp.h>
 #include "message_handler.h"
 using grpc::Channel;
@@ -65,12 +66,13 @@ void start_client(std::string server_address, flwr::Client* client, int grpc_max
         std::shared_ptr<ClientReaderWriter<ClientMessage, ServerMessage>> reader_writer(stub_->Join(&context));
         ServerMessage sm;
         while (reader_writer->Read(&sm)) {
-            std::cout << "Got message type: " << sm.GetTypeName() << " content: " << sm.DebugString() << std::endl;
+	    std::cout << "Got message type: " << sm.GetTypeName()<< std::endl;
+	    //std::cout << "Got message type: " << sm.GetTypeName() << " content: " << sm.DebugString() << std::endl;
             std::tuple<ClientMessage, int, bool> receive = handle(client, sm);
             //std::cout << "DEBUG: handle done" << std::endl;
             sleep_duration = std::get<1>(receive);
             //std::cout << "DEBUG: begin write" << std::endl;
-            std::cout << "Send message type: " << std::get<0>(receive).GetTypeName() << " content: " << std::get<0>(receive).DebugString() << std::endl;
+            //std::cout << "Send message type: " << std::get<0>(receive).GetTypeName() << " content: " << std::get<0>(receive).DebugString() << std::endl;
             reader_writer->Write(std::get<0>(receive));
             std::cout << "DEBUG: one time read&write done\n\n\n" << std::endl;
             if (std::get<2>(receive) == false) {

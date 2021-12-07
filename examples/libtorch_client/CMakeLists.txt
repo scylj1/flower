@@ -40,6 +40,7 @@ set(trans_proto_srcs "transport.pb.cc")
 set(trans_proto_hdrs "transport.pb.h")
 set(trans_grpc_srcs "transport.grpc.pb.cc")
 set(trans_grpc_hdrs "transport.grpc.pb.h")
+set(flwr_hdrs "../../src/cc/flwr/include/start.h")
 
 add_custom_command(
   OUTPUT "${trans_proto_srcs}" "${trans_proto_hdrs}" "${trans_grpc_srcs}" "${trans_grpc_hdrs}"
@@ -64,6 +65,8 @@ add_library(trans_grpc_proto
   ${trans_proto_srcs}
   ${trans_proto_hdrs})
 
+add_library(flwr STATIC ${flwr_hdrs})
+
 target_include_directories(trans_grpc_proto PUBLIC include)
 
 target_link_libraries(trans_grpc_proto
@@ -79,16 +82,17 @@ add_executable(${EXECUTABLE_NAME}
                   "src/transform.cc"
                   "include/torch_client.h"
                   "include/cifar10.h"
-                  "../../src/cc/flwr/include/client.h"
-                  "../../src/cc/flwr/include/start.h"
+		  #"../../src/cc/flwr/include/client.h"
+		  #"../../src/cc/flwr/include/start.h"
                   "include/transform.h")
 
 target_link_libraries(${EXECUTABLE_NAME}
      trans_grpc_proto
-     gRPC::grpc++_reflection
-     ${_GRPC_GRPCPP}
-     ${_PROTOBUF_LIBPROTOBUF}
-     TorchVision::TorchVision)
+     #gRPC::grpc++_reflection
+     #${_GRPC_GRPCPP}
+     #${_PROTOBUF_LIBPROTOBUF}
+     TorchVision::TorchVision
+     flwr)
 
 # Dataset fetching
 if(DOWNLOAD_DATASETS)
