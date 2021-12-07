@@ -26,12 +26,18 @@ set(EXECUTABLE_NAME client)
 
 # Choose existing gRPC or build a new one
 include(cmake/common.cmake)
+
+# Include directories
 include_directories(include)
+include_directories("../../src/cc/flwr/src")
+include_directories("../../src/cc/flwr/include")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/cmake")
 
 # Include Torchvision, which in turn includes Torch 
 find_package(TorchVision REQUIRED)
 
-add_subdirectory("../../src/cc/flwr")
+# Set up Flower libraries
+add_subdirectory(${CMAKE_SOURCE_DIR}/cmake)
 
 # Targets flower client
 add_executable(${EXECUTABLE_NAME}
@@ -41,15 +47,9 @@ add_executable(${EXECUTABLE_NAME}
                   "src/transform.cc"
                   "include/torch_client.h"
                   "include/cifar10.h"
-		  #"../../src/cc/flwr/include/client.h"
-		  #"../../src/cc/flwr/include/start.h"
                   "include/transform.h")
 
 target_link_libraries(${EXECUTABLE_NAME}
-	#trans_grpc_proto
-     #gRPC::grpc++_reflection
-     #${_GRPC_GRPCPP}
-     #${_PROTOBUF_LIBPROTOBUF}
      TorchVision::TorchVision
      flwr)
 
@@ -66,6 +66,3 @@ if(DOWNLOAD_DATASETS)
 
 endif()
 
-#add_executable(flwr_client src/client.cc)
-#target_include_directories(flwr_client include)
-#target_link_libraries(flwr_client grpc++)

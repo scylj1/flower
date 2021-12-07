@@ -1,4 +1,4 @@
-#include "start.h"
+#include "../include/start.h"
 
 void start::start_client(std::string server_address, flwr::Client* client, int grpc_max_message_length) {
 

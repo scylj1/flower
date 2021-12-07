@@ -1,5 +1,7 @@
+#Generate Flower libaries
+
 # Protobuf file defining flower messages
-get_filename_component(trans_proto "../../proto/flwr/proto/transport.proto" ABSOLUTE)
+get_filename_component(trans_proto "../../../src/proto/flwr/proto/transport.proto" ABSOLUTE)
 get_filename_component(trans_proto_path "${trans_proto}" PATH)
 
 ## gRPC 
@@ -8,8 +10,8 @@ set(trans_proto_srcs "transport.pb.cc")
 set(trans_proto_hdrs "transport.pb.h")
 set(trans_grpc_srcs "transport.grpc.pb.cc")
 set(trans_grpc_hdrs "transport.grpc.pb.h")
-set(flwr_hdrs "/include/start.h")
-set(flwr_srcs "/src/start.cc")
+set(flwr_hdrs "../../../src/cc/flwr/include/start.h")
+set(flwr_srcs "../../../src/cc/flwr/src/start.cc")
 
 add_custom_command(
   OUTPUT "${trans_proto_srcs}" "${trans_proto_hdrs}" "${trans_grpc_srcs}" "${trans_grpc_hdrs}"
@@ -20,11 +22,6 @@ add_custom_command(
        --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
           "${trans_proto}"
   DEPENDS "${trans_proto}")
-
-# Include generated *.pb.h files
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
-include_directories("include")
-
 
 # Build trans_grpc_proto
 add_library(trans_grpc_proto
@@ -45,5 +42,6 @@ target_link_libraries(trans_grpc_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
+
 target_link_libraries(flwr
 	trans_grpc_proto)
