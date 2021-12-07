@@ -45,7 +45,9 @@ int GRPC_MAX_MESSAGE_LENGTH = 536870912;  //  == 512 * 1024 * 1024
  *                        know about the increased limit and block larger messages.
  *
  */
-void start_client(std::string server_address, flwr::Client* client, int grpc_max_message_length = GRPC_MAX_MESSAGE_LENGTH) {
 
-    
-}
+class start
+{
+public:
+	void start_client(std::string server_address, flwr::Client* client, int grpc_max_message_length = GRPC_MAX_MESSAGE_LENGTH);
+};
