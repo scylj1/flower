@@ -1,4 +1,5 @@
 #include "torch_client.h"
+
 /**
  * Initializer
  */
@@ -33,10 +34,16 @@ flwr::ParametersRes TorchClient<DataLoader>::get_parameters() {
  */
 template<typename DataLoader>
 flwr::FitRes TorchClient<DataLoader>::fit(flwr::FitIns ins) {
-  // int num_samples = train(net, train_loader, optimizer, device);
+  flwr::Parameters p = ins.getParameters();
+  std::istringstream stream(p.getTensors().front());
+  //torch::load(net, stream);
+  
+  //std::tuple<size_t, float, double> result = train(net, train_loader, optimizer, device);
   flwr::FitRes resp;
 
   resp.setParameters(this->get_parameters().getParameters());
+  
+  //resp.setNum_example(std::get<0>(result));
   resp.setNum_example(30);
   return resp;
 };
@@ -47,8 +54,16 @@ flwr::FitRes TorchClient<DataLoader>::fit(flwr::FitIns ins) {
  */
 template<typename DataLoader>
 flwr::EvaluateRes TorchClient<DataLoader>::evaluate(flwr::EvaluateIns ins) {
- flwr::EvaluateRes resp;  
+  flwr::Parameters p = ins.getParameters();
+  std::istringstream stream(p.getTensors().front());
+  //torch::load(net, stream);
 
+  //std::tuple<size_t, float, double> result = train(net, test_loader, device);
+  flwr::EvaluateRes resp;  
+  //resp.setNum_example(std::get<0>(result));
+  //resp.setLoss(std::get<1>(result));
+  resp.setNum_example(30);
+  resp.setLoss(0.1);
   return resp;
 };
 
