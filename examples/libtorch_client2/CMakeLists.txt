@@ -35,7 +35,7 @@ endif()
 
 
 ######################
-### FLWR_GRPC_PROTO
+### Generate Flower proto files
 
 get_filename_component(FLWR_PROTO "../../src/proto/flwr/proto/transport.proto" ABSOLUTE)
 get_filename_component(FLWR_PROTO_PATH "${FLWR_PROTO}" PATH)
@@ -57,6 +57,9 @@ add_custom_command(
   DEPENDS "${FLWR_PROTO}"
 )
 
+######################
+### Generate Flower grpc libraries
+
 add_library(flwr_grpc_proto 
   ${FLWR_GRPC_SRCS}
   ${FLWR_GRPC_HDRS}
@@ -73,7 +76,7 @@ target_link_libraries(flwr_grpc_proto
 )
 
 ######################
-### FLWR_LIB
+### Generate Flower libraries
 
 file(GLOB FLWR_SRCS "../../src/cc/flwr/src/*.cc")
 set(FLWR_INCLUDE_DIR "../../src/cc/flwr/include")
@@ -90,7 +93,7 @@ target_link_libraries(flwr
 )
 
 ######################
-### FLWR_CLIENT
+### Build Libtorch client
 
 file(GLOB FLWR_CLIENT_SRCS src/*.cc)
 set(EXECUTABLE_NAME flwr_client)
