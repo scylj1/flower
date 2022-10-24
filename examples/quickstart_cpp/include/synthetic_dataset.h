@@ -6,6 +6,7 @@
 #define FLOWER_CPP_SYNTHETIC_DATASET_H
 
 #include <vector>
+#include "stdlib.h"
 
 class SyntheticDataset {
  public:

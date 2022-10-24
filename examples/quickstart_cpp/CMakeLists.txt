@@ -5,6 +5,13 @@ project(SimpleCppFlowerClient VERSION 0.10
 set(CMAKE_CXX_STANDARD 17)
 set(ABSL_PROPAGATE_CXX_STD ON)
 
+set(CMAKE_PREFIX_PATH "/usr/local/lib;/home/ljiang/libtorch;/home/ljiang/torchvision")
+# Include Torchvision, which in turn includes Torch 
+find_package(TorchVision REQUIRED)
+if(TorchVision_FOUND)
+  message("Found")
+endif(TorchVision_FOUND)
+
 ######################
 ### Download gRPC 
 
@@ -83,6 +90,7 @@ target_link_libraries(flwr
   flwr_grpc_proto
 )
 
+
 ######################
 ### FLWR_CLIENT
 file(GLOB FLWR_CLIENT_SRCS src/*.cc)
@@ -92,8 +100,14 @@ add_executable(${EXECUTABLE_NAME} ${FLWR_CLIENT_SRCS})
 target_include_directories(${EXECUTABLE_NAME} PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
   ${FLWR_INCLUDE_DIR}
+  ${TorchVision_INCLUDE_DIR}
 )
 
-target_link_libraries(${EXECUTABLE_NAME}
+
+
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC
+  ${TorchVision_LIBRARY}
   flwr
+  
 )
+
